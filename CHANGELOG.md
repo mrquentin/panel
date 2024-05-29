@@ -3,6 +3,12 @@ This file is a running track of new features and fixes to each version of the pa
 
 This project follows [Semantic Versioning](http://semver.org) guidelines.
 
+## v1.11.7b
+
+### Added
+
+* Curseforge Addon
+
 ## v1.11.7
 
 ### Added
