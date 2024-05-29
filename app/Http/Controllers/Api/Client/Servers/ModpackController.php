@@ -15,7 +15,7 @@ use Pterodactyl\Services\Modpacks\CurseForgeModpackService;
 use Pterodactyl\Services\Modpacks\VoidsWrathModpackService;
 use Pterodactyl\Services\Modpacks\FeedTheBeastModpackService;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
-use Pterodactyl\Models\Egg;
+// use Pterodactyl\Models\Egg;
 
 enum ModpackProvider: string
 {
@@ -122,7 +122,7 @@ class ModpackController extends ClientApiController
         $installerEgg = Egg::where('author', 'modpack-installer@ric-rac.org')->firstOrFail();
         if ($server->egg_id === $installerEgg->id) {
             return response()->json([
-                'message' => 'Already processing a modpack installation job.'
+                'message' => 'Already processing a modpack installation job.',
             ], 409);
         }
 
