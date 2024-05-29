@@ -17,7 +17,17 @@ class EggControllerTest extends ApplicationApiIntegrationTestCase
     {
         $eggs = Egg::query()->where('nest_id', 1)->get();
 
+        // Check if eggs are retrieved
+        if ($eggs->isEmpty()) {
+            $this->fail('No eggs found for nest_id 1');
+        }
+
         $response = $this->getJson('/api/application/nests/' . $eggs->first()->nest_id . '/eggs');
+        
+        // Output the actual JSON response for debugging
+        $responseData = $response->json();
+        print_r($responseData);
+
         $response->assertStatus(Response::HTTP_OK);
         $response->assertJsonCount(count($eggs), 'data');
         $response->assertJsonStructure([
@@ -29,7 +39,6 @@ class EggControllerTest extends ApplicationApiIntegrationTestCase
                         'id', 'uuid', 'nest', 'author', 'description', 'docker_image', 'startup', 'created_at', 'updated_at',
                         'script' => ['privileged', 'install', 'entry', 'container', 'extends'],
                         'config' => [
-                            // 'files' => [],
                             'startup' => ['done'],
                             'stop',
                             'logs' => [],
@@ -40,23 +49,15 @@ class EggControllerTest extends ApplicationApiIntegrationTestCase
             ],
         ]);
 
-        foreach (array_get($response->json(), 'data') as $datum) {
+        foreach (array_get($responseData, 'data') as $datum) {
             $egg = $eggs->where('id', '=', $datum['attributes']['id'])->first();
-
-            // Normalize 'files' to an empty array if it is an empty object
-            if (empty($datum['attributes']['config']['files'])) {
-                $datum['attributes']['config']['files'] = [];
-            }
 
             $expected = json_encode(Arr::sortRecursive($datum['attributes']));
             $actual = json_encode(Arr::sortRecursive($this->getTransformer(EggTransformer::class)->transform($egg)));
 
-            // Normalize 'files' in actual data to be an empty array if it is an empty object
-            if (empty($actualData['config']['files'])) {
-                $actualData['config']['files'] = [];
-            }
-
-            $actual = json_encode(Arr::sortRecursive($actualData));
+            // Output expected and actual for debugging
+            echo "Expected: $expected\n";
+            echo "Actual: $actual\n";
 
             $this->assertSame(
                 $expected,
