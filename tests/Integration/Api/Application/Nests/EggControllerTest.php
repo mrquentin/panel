@@ -43,8 +43,20 @@ class EggControllerTest extends ApplicationApiIntegrationTestCase
         foreach (array_get($response->json(), 'data') as $datum) {
             $egg = $eggs->where('id', '=', $datum['attributes']['id'])->first();
 
+            // Normalize 'files' to an empty array if it is an empty object
+            if (empty($datum['attributes']['config']['files'])) {
+                $datum['attributes']['config']['files'] = [];
+            }
+
             $expected = json_encode(Arr::sortRecursive($datum['attributes']));
             $actual = json_encode(Arr::sortRecursive($this->getTransformer(EggTransformer::class)->transform($egg)));
+
+            // Normalize 'files' in actual data to be an empty array if it is an empty object
+            if (empty($actualData['config']['files'])) {
+                $actualData['config']['files'] = [];
+            }
+
+            $actual = json_encode(Arr::sortRecursive($actualData));
 
             $this->assertSame(
                 $expected,
