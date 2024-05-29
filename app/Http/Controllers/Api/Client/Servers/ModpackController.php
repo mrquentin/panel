@@ -15,7 +15,6 @@ use Pterodactyl\Services\Modpacks\CurseForgeModpackService;
 use Pterodactyl\Services\Modpacks\VoidsWrathModpackService;
 use Pterodactyl\Services\Modpacks\FeedTheBeastModpackService;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
-// use Pterodactyl\Models\Egg;
 
 enum ModpackProvider: string
 {
