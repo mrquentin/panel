@@ -29,7 +29,7 @@ class EggControllerTest extends ApplicationApiIntegrationTestCase
                         'id', 'uuid', 'nest', 'author', 'description', 'docker_image', 'startup', 'created_at', 'updated_at',
                         'script' => ['privileged', 'install', 'entry', 'container', 'extends'],
                         'config' => [
-                            'files' => [],
+                            'files' => ['*'],
                             'startup' => ['done'],
                             'stop',
                             'logs' => [],
